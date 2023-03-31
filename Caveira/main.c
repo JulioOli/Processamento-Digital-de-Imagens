@@ -26,7 +26,6 @@ int main()
 
     int MatOriginal[linhas][colunas];
     int MatEspelhada[linhas][colunas];
-    int MatDeitada[linhas][colunas];
 
     // Lendo a imagem do arquivo PGM
     for (i = 0; i < linhas; i++){
@@ -40,7 +39,7 @@ int main()
 
 //======================================================================================================================
 
-    //deixando a imagem espelhada de lado
+    //deixando a imagem espelhada horizontalmente
 
     for(i = 0; i < linhas; i++){
         for(j = 0; j < colunas; j++){
@@ -78,6 +77,48 @@ int main()
     }
 
     fclose(fp);
+
+//======================================================================================================================
+
+//deixando a imagem espelhada verticalmente
+
+    for(i = 0; i < linhas; i++){
+        for(j = 0; j < colunas; j++){
+            MatEspelhada[i][j] = MatOriginal[linhas-1-i][j];
+        }
+    }
+
+    //escrevendo um arquivo com a matriz a -90º
+    fp = fopen("Espelhada2.pgm", "w");
+    if(fp == NULL)
+    {
+        printf("Erro ao abrir o arquivo.\n");
+        return 0;
+    }
+
+    // Writing Magic Number to the File
+    fprintf(fp, "P2\n");
+
+    //escrevendo oque tem na linha 2 do arquivo principal
+    fprintf(fp, "# Created by IrfanView\n");
+
+    // Writing Width and Height
+    fprintf(fp, "%d %d\n", colunas, linhas);
+
+    //escrevendo o brilho máximo
+    fprintf(fp, "%d\n", brilho);
+
+    //escrevendo os pixels
+    for(i = 0; i < linhas; i++)
+    {
+        for(j = 0; j < colunas; j++)
+        {
+            fprintf(fp, "%3d\n", MatEspelhada[i][j]);
+        }
+    }
+
+    fclose(fp);
+
 
 //======================================================================================================================
 
