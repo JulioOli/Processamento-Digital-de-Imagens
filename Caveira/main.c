@@ -25,7 +25,7 @@ int main()
     printf("%d\n", brilho);
 
     int MatOriginal[linhas][colunas];
-    int MatEspelhada[linhas][colunas];
+    int MatModificada[linhas][colunas];
 
     // Lendo a imagem do arquivo PGM
     for (i = 0; i < linhas; i++){
@@ -43,7 +43,7 @@ int main()
 
     for(i = 0; i < linhas; i++){
         for(j = 0; j < colunas; j++){
-            MatEspelhada[i][j] = MatOriginal[i][colunas-1-j];
+            MatModificada[i][j] = MatOriginal[i][colunas-1-j];
         }
     }
 
@@ -72,7 +72,7 @@ int main()
     {
         for(j = 0; j < colunas; j++)
         {
-            fprintf(fp, "%3d\n", MatEspelhada[i][j]);
+            fprintf(fp, "%3d\n", MatModificada[i][j]);
         }
     }
 
@@ -84,7 +84,7 @@ int main()
 
     for(i = 0; i < linhas; i++){
         for(j = 0; j < colunas; j++){
-            MatEspelhada[i][j] = MatOriginal[linhas-1-i][j];
+            MatModificada[i][j] = MatOriginal[linhas-1-i][j];
         }
     }
 
@@ -113,7 +113,7 @@ int main()
     {
         for(j = 0; j < colunas; j++)
         {
-            fprintf(fp, "%3d\n", MatEspelhada[i][j]);
+            fprintf(fp, "%3d\n", MatModificada[i][j]);
         }
     }
 
@@ -121,6 +121,94 @@ int main()
 
 
 //======================================================================================================================
+
+//binarizando a imagem
+
+    for(i=0; i<linhas; i++){
+        for(j=0; j<colunas; j++){
+            if(MatOriginal[i][j] <= 112){
+                MatModificada[i][j] = 0;
+            }else{
+                MatModificada[i][j] = 255;
+            }
+        }
+    }
+
+    //escrevendo um arquivo com a matriz binarizada
+    fp = fopen("ImagemBinarizada.pgm", "w");
+    if(fp == NULL)
+    {
+        printf("Erro ao abrir o arquivo.\n");
+        return 0;
+    }
+
+    // Writing Magic Number to the File
+    fprintf(fp, "P2\n");
+
+    //escrevendo oque tem na linha 2 do arquivo principal
+    fprintf(fp, "# Created by IrfanView\n");
+
+    // Writing Width and Height
+    fprintf(fp, "%d %d\n", colunas, linhas);
+
+    //escrevendo o brilho máximo
+    fprintf(fp, "%d\n", brilho);
+
+    //escrevendo os pixels
+    for(i = 0; i < linhas; i++)
+    {
+        for(j = 0; j < colunas; j++)
+        {
+            fprintf(fp, "%3d\n", MatModificada[i][j]);
+        }
+    }
+
+    fclose(fp);
+
+
+//======================================================================================================================
+
+//reduzindo os níveis de cinza da imagem
+
+
+    for(i=0; i<linhas; i++){
+        for(j=0; j<colunas; j++){
+            MatModificada[i][j] = MatOriginal[i][j]-250;
+        }
+    }
+
+
+    //escrevendo um arquivo com a matriz com menos tons de cinza
+    fp = fopen("TonsDeCinzaReduzidos.pgm", "w");
+    if(fp == NULL)
+    {
+        printf("Erro ao abrir o arquivo.\n");
+        return 0;
+    }
+
+    // Writing Magic Number to the File
+    fprintf(fp, "P2\n");
+
+    //escrevendo oque tem na linha 2 do arquivo principal
+    fprintf(fp, "# Created by IrfanView\n");
+
+    // Writing Width and Height
+    fprintf(fp, "%d %d\n", colunas, linhas);
+
+    //escrevendo o brilho máximo
+    fprintf(fp, "%d\n", brilho);
+
+    //escrevendo os pixels
+    for(i = 0; i < linhas; i++)
+    {
+        for(j = 0; j < colunas; j++)
+        {
+            fprintf(fp, "%3d\n", MatModificada[i][j]);
+        }
+    }
+
+    fclose(fp);
+
 
 //======================================================================================================================
 
